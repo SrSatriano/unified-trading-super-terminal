@@ -1,77 +1,113 @@
+<div align="center">
+
 # Unified Trading Super-Terminal
 
-<p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-blue" alt="version" />
-  <img src="https://img.shields.io/badge/license-MIT-green" alt="license" />
-  <img src="https://img.shields.io/badge/status-production--ready-brightgreen" alt="status" />
-  <img src="https://img.shields.io/badge/CI-passing-success" alt="ci" />
+**Super terminal unificado de trading**
+
+<p>
+  <a href="https://github.com/SrSatriano/unified-trading-super-terminal"><img src="https://img.shields.io/badge/GitHub-unified-trading-super-terminal-24292e?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a>
 </p>
 
-> **TUI estilo Bloomberg para risco, execução e carteira unificados.**
+<p>
+  <img src="https://img.shields.io/badge/versão-1.0.0-0ea5e9?style=flat-square" alt="versão" />
+  <img src="https://img.shields.io/badge/licença-MIT-22c55e?style=flat-square" alt="licença" />
+  <img src="https://img.shields.io/badge/idioma-pt--BR-blue?style=flat-square" alt="idioma" />
+  <img src="https://img.shields.io/badge/CI-GitHub_Actions-8b5cf6?style=flat-square" alt="ci" />
+</p>
 
-Desenvolvido e mantido por [@SrSatriano](https://github.com/SrSatriano). Repositório: [unified-trading-super-terminal](https://github.com/SrSatriano/unified-trading-super-terminal).
+<p><strong>Interface TUI estilo terminal profissional para risco, execução e carteira em um só lugar.</strong></p>
+
+<p>
+  Autor: <a href="https://github.com/SrSatriano">@SrSatriano</a> ·
+  Release <strong>1.0.0</strong> (2026-03-26)
+</p>
+
+</div>
 
 ---
 
 ## Índice
 
-- [Visão geral](#visão-geral)
-- [Funcionalidades](#funcionalidades)
-- [Stack](#stack)
-- [Arquitetura](#arquitetura)
-- [Início rápido](#início-rápido)
-- [Configuração](#configuração)
-- [Testes](#testes)
-- [Performance](#performance)
-- [Deploy](#deploy)
-- [Documentação](#documentação)
-- [Segurança](#segurança)
-- [Changelog](#changelog)
-- [Licença](#licença)
+1. [Visão geral](#visão-geral)
+2. [Problema e solução](#problema-e-solução)
+3. [Para quem é](#para-quem-é)
+4. [Casos de uso](#casos-de-uso)
+5. [Funcionalidades](#funcionalidades)
+6. [Stack tecnológica](#stack-tecnológica)
+7. [Arquitetura](#arquitetura)
+8. [Estrutura do repositório](#estrutura-do-repositório)
+9. [Pré-requisitos](#pré-requisitos)
+10. [Instalação e execução](#instalação-e-execução)
+11. [Configuração](#configuração)
+12. [Testes](#testes)
+13. [Performance](#performance)
+14. [Deploy e operação](#deploy-e-operação)
+15. [Limitações conhecidas](#limitações-conhecidas)
+16. [Roadmap](#roadmap)
+17. [Documentação complementar](#documentação-complementar)
+18. [Segurança e licença](#segurança-e-licença)
 
 ---
 
 ## Visão geral
 
-Este projeto entrega uma solução **completa e pronta para produção** (1.0.0) para o domínio descrito no título. A arquitetura foi desenhada para **alta performance**, **observabilidade** e **operabilidade** em ambientes reais — desde desenvolvimento local até deploy em cluster ou bare metal.
+Este repositório faz parte do **portfólio de engenharia** mantido por [@SrSatriano](https://github.com/SrSatriano). A versão **1.0.0** entrega implementação do núcleo do produto, testes automatizados, pipeline de integração contínua e documentação operacional em **português brasileiro**.
 
-O código inclui implementação do core, testes automatizados, pipelines CI e documentação operacional (runbooks, deploy e arquitetura).
+O objetivo é permitir que você clone, execute e evolua o projeto com clareza — do desenvolvimento local ao deploy em produção.
+
+## Problema e solução
+
+| | |
+|---|---|
+| **Problema** | Múltiplas abas e plataformas dispersam atenção e atrasam decisões de risco. |
+| **Solução** | TUI de baixo consumo de RAM com kill switch, métricas de exposição e conectores configuráveis. |
+
+## Para quem é
+
+Traders ativos, risk managers e entusiastas de Rust.
+
+## Casos de uso
+
+- Monitoramento 24/7 em servidor headless
+- Modo somente leitura para auditoria
 
 ## Funcionalidades
 
-- [x] Layout multi-painel 30 FPS
+- [x] Layout multi-painel com refresh ~30 FPS
 - [x] Kill switch e limites de exposição
-- [x] Integração REST Binance/Bybit
-- [x] Chaves via keyring / .env
-- [x] Atalhos documentados e modo read-only
+- [x] Conector mock e base para REST Binance/Bybit
+- [x] Credenciais via keyring ou variáveis de ambiente
+- [x] Atalhos de teclado documentados
 
-## Stack
+## Stack tecnológica
 
-**Rust, Ratatui, Tokio, REST/FIX**
+| Camada | Tecnologias |
+|--------|-------------|
+| **Principal** | Rust, Ratatui, Tokio, REST |
 
 ## Arquitetura
 
 ```mermaid
-flowchart TB
-  subgraph Clients
-    U[Operators / APIs]
-  end
-  subgraph Core
-    S[Service Layer]
-    E[Execution Engine]
-  end
-  subgraph Data
-    D[(Storage)]
-    M[Metrics]
-  end
-  U --> S --> E
-  E --> D
-  S --> M
+flowchart LR
+  TUI[TUI Ratatui] --> APP[Estado da aplicação]
+  APP --> CON[Conectores REST]
+  CON --> RSK[Gestão de risco]
 ```
 
-Diagrama detalhado, decisões de design e escalabilidade: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Detalhamento de componentes, fluxos de dados e decisões de design: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-## Início rápido
+## Estrutura do repositório
+
+| Caminho | Descrição |
+|---------|-----------|
+| `src/ui.rs` | Renderização Ratatui |
+| `src/connectors/` | Integrações de exchange |
+
+## Pré-requisitos
+
+Rust 1.75+ (rustup), terminal com suporte a cores verdadeiras.
+
+## Instalação e execução
 
 ```bash
 git clone https://github.com/SrSatriano/unified-trading-super-terminal.git
@@ -79,67 +115,72 @@ cd unified-trading-super-terminal
 ```
 
 ```bash
-cargo build --release && ./target/release/uterm
+cargo build --release
+./target/release/uterm
 ```
 
 ## Configuração
 
-| Variável / Arquivo | Descrição |
-|------------------|-----------|
-| `.env` / `config/` | Credenciais e endpoints (nunca commitar segredos) |
-| Documentação em `docs/` | Parâmetros avançados e tuning |
+| Variável | Descrição | Exemplo |
+|----------|-----------|--------|
+| `READ_ONLY` | Desativa envio de ordens | `true` |
+| `BINANCE_API_KEY` | Chave API | `` |
 
-Copie exemplos: `cp .env.example .env` ou `cp config/example.env .env` quando disponível.
+> **Importante:** nunca faça commit de arquivos `.env` com segredos reais. Use `.env.example` como referência.
 
 ## Testes
 
+Execute a suíte de testes antes de abrir pull requests:
+
 ```bash
-# Consulte o stack — exemplos:
-# Python: pytest
-# Node: npm test
-# Go: go test ./...
-# Rust: cargo test
-# Hardhat: npx hardhat test
-# C++: ctest ou ./build/*_test
+cargo test
 ```
 
-A pipeline CI (`.github/workflows/ci.yml`) executa build e testes em cada push para `main`.
+A pipeline [`.github/workflows/ci.yml`](.github/workflows/ci.yml) repete build e testes em cada push para `main`.
 
 ## Performance
 
 | Métrica | Valor |
 |---------|-------|
-| Uso RAM | < 25 MB |
+| RAM | < 25 MB |
 | Refresh UI | 33 ms |
 
-Metodologia completa e reprodução: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) e README de benchmarks quando aplicável.
+Metodologia, hardware de referência e flags de compilação: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
-## Deploy
+## Deploy e operação
 
-Guia passo a passo: [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)  
-Runbook de operação: [docs/OPERATIONS.md](docs/OPERATIONS.md)
+| Guia | Conteúdo |
+|------|----------|
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Homologação, produção e rollback |
+| [docs/OPERATIONS.md](docs/OPERATIONS.md) | Monitoramento, alertas e incidentes |
 
-## Documentação
+## Limitações conhecidas
 
-| Documento | Conteúdo |
-|-----------|----------|
-| [ARCHITECTURE](docs/ARCHITECTURE.md) | Guia técnico |
-| [DEPLOYMENT](docs/DEPLOYMENT.md) | Guia técnico |
-| [OPERATIONS](docs/OPERATIONS.md) | Guia técnico |
+- Conectores ao vivo exigem chaves e testes em paper trading
+
+## Roadmap
+
+- Painel de ordens abertas
+- Integração FIX
+
+## Documentação complementar
+
+| Documento | Descrição |
+|-----------|-----------|
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Arquitetura e decisões técnicas |
+| [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) | Deploy passo a passo |
+| [docs/OPERATIONS.md](docs/OPERATIONS.md) | Runbook operacional |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Como contribuir |
 | [CHANGELOG.md](CHANGELOG.md) | Histórico de versões |
 | [SECURITY.md](SECURITY.md) | Política de segurança |
+| [AUTHORS.md](AUTHORS.md) | Créditos |
 
-## Segurança
+## Segurança e licença
 
-- Dependências revisadas na release 1.0.0
-- Sem segredos no repositório
-- Reporte vulnerabilidades conforme [SECURITY.md](SECURITY.md)
+- Dependências revisadas na release **1.0.0**
+- Vulnerabilidades: siga [SECURITY.md](SECURITY.md)
+- Licença: [MIT](LICENSE) © SrSatriano 2026
 
-## Changelog
+---
 
-Ver [CHANGELOG.md](CHANGELOG.md) — release **1.0.0** (2026-03-26) com feature set completo.
-
-## Licença
-
-[MIT](LICENSE) © SrSatriano 2026
+<p align="center">Desenvolvido com foco em clareza e engenharia de produção · <a href="https://github.com/SrSatriano/unified-trading-super-terminal">Ver no GitHub</a></p>
