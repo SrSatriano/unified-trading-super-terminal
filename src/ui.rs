@@ -34,7 +34,7 @@ pub fn draw(frame: &mut Frame, state: &AppState) {
     let chunks = Layout::default()
         .direction(Direction::Horizontal)
         .constraints([Constraint::Percentage(50), Constraint::Percentage(50)])
-        .split(frame.area());
+        .split(frame.size());
 
     let left = Paragraph::new(vec![
         Line::from(vec![Span::styled("Portfolio", Style::default().add_modifier(Modifier::BOLD))]),

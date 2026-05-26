@@ -9,8 +9,6 @@ pub struct AppState {
 
 impl AppState {
     pub fn refresh_portfolio(&mut self) {
-                self.pnl_pct = 2.4;
-        self.exposure_pct = 12.0;
-        self.var_95 = 1240.0;
+        crate::connectors::mock::refresh_mock(self);
     }
 }
