@@ -9,8 +9,7 @@ pub struct AppState {
 
 impl AppState {
     pub fn refresh_portfolio(&mut self) {
-        // TODO: fetch from REST connector
-        self.pnl_pct = 2.4;
+                self.pnl_pct = 2.4;
         self.exposure_pct = 12.0;
         self.var_95 = 1240.0;
     }
